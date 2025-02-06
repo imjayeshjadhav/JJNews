@@ -29,37 +29,56 @@ export class News extends Component {
 
   async componentDidMount()  // a lifecycle component in react, asynchronous method using 'async' to handle asynchronous operations inside
   {
-    let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=1&pageSize=${this.props.pageSize}`
-    let data = await fetch(url) // The 'await' keyword ensures that the function pauses until the request completes.
-    let parsedData = await data.json() // Parse the response from 'fetch' as JSON and store the parsed result in 'parsedData'. // The 'await' ensures the code waits until the JSON is successfully parsed.
-    this.setState({articles: parsedData.articles, totalResults: parsedData.totalResults})
+    // let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=1&pageSize=${this.props.pageSize}`
+    // let data = await fetch(url) // The 'await' keyword ensures that the function pauses until the request completes.
+    // let parsedData = await data.json() // Parse the response from 'fetch' as JSON and store the parsed result in 'parsedData'. // The 'await' ensures the code waits until the JSON is successfully parsed.
+    // this.setState({articles: parsedData.articles, totalResults: parsedData.totalResults})
+    this.updatePage()
   }
 
-  handlePrevClick =async ()=>{
-
-    let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=${this.state.page-1}&pageSize=${this.props.pageSize}`
+  async updatePage()
+  {
+    const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=${this.state.page}&pageSize=${this.props.pageSize}`
+    this.setState({loading:true})
     let data = await fetch(url) // The 'await' keyword ensures that the function pauses until the request completes.
     let parsedData = await data.json() // Parse the response from 'fetch' as JSON and store the parsed result in 'parsedData'. // The 'await' ensures the code waits until the JSON is successfully parsed.
 
     this.setState({
-      page:this.state.page-1,
       articles: parsedData.articles,
+      totalResults:parsedData.totalResults,
       loading:false
     })
   }
 
-  handleNextClick=async ()=>{
-    if (!(this.state.page+1 >  Math.ceil(this.state.totalResults/this.props.pageSize)))
-    {  let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=${this.state.page+1}&pageSize=${this.props.pageSize}`
-      this.setState({loading:true})
-      let data = await fetch(url) // The 'await' keyword ensures that the function pauses until the request completes.
-      let parsedData = await data.json() // Parse the response from 'fetch' as JSON and store the parsed result in 'parsedData'. // The 'await' ensures the code waits until the JSON is successfully parsed.
-    this.setState({
-      page:this.state.page+1,
-      articles: parsedData.articles,
-            loading:false
-    })
+  handlePrevClick =async ()=>{
+
+    // let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=${this.state.page-1}&pageSize=${this.props.pageSize}`
+    // let data = await fetch(url) // The 'await' keyword ensures that the function pauses until the request completes.
+    // let parsedData = await data.json() // Parse the response from 'fetch' as JSON and store the parsed result in 'parsedData'. // The 'await' ensures the code waits until the JSON is successfully parsed.
+
+    // this.setState({
+    //   page:this.state.page-1,
+    //   articles: parsedData.articles,
+    //   loading:false
+    // })
+    this.setState({page: this.state.page-1})
+    this.updatePage();
   }
+
+  handleNextClick=async ()=>{
+  //   if (!(this.state.page+1 >  Math.ceil(this.state.totalResults/this.props.pageSize)))
+  //   {  let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=${this.state.page+1}&pageSize=${this.props.pageSize}`
+  //     this.setState({loading:true})
+  //     let data = await fetch(url) // The 'await' keyword ensures that the function pauses until the request completes.
+  //     let parsedData = await data.json() // Parse the response from 'fetch' as JSON and store the parsed result in 'parsedData'. // The 'await' ensures the code waits until the JSON is successfully parsed.
+  //   this.setState({
+  //     page:this.state.page+1,
+  //     articles: parsedData.articles,
+  //           loading:false
+  //   })
+  // }
+    this.setState({page:this.state.page+1})
+    this.updatePage();
   }
   render() {
     return (
