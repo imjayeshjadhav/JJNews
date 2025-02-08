@@ -14,25 +14,24 @@ export class News extends Component {
     country : PropTypes.string,
     pageSize: PropTypes.number,
     category: PropTypes.string,
-
   }
 
-  constructor()
+  capitalize = (string) => {
+    return string.charAt(0).toUpperCase()+string.slice(1);
+  }
+  constructor(props)
   {
-    super();
+    super(props);
     this.state={
       articles: [],
       loading:false,
       page:1
     }
+    document.title=`${this.capitalize(this.props.category)} - NewsMonkey`
   }
 
   async componentDidMount()  // a lifecycle component in react, asynchronous method using 'async' to handle asynchronous operations inside
   {
-    // let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=1&pageSize=${this.props.pageSize}`
-    // let data = await fetch(url) // The 'await' keyword ensures that the function pauses until the request completes.
-    // let parsedData = await data.json() // Parse the response from 'fetch' as JSON and store the parsed result in 'parsedData'. // The 'await' ensures the code waits until the JSON is successfully parsed.
-    // this.setState({articles: parsedData.articles, totalResults: parsedData.totalResults})
     this.updatePage()
   }
 
@@ -40,9 +39,9 @@ export class News extends Component {
   {
     const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=${this.state.page}&pageSize=${this.props.pageSize}`
     this.setState({loading:true})
-    let data = await fetch(url) // The 'await' keyword ensures that the function pauses until the request completes.
-    let parsedData = await data.json() // Parse the response from 'fetch' as JSON and store the parsed result in 'parsedData'. // The 'await' ensures the code waits until the JSON is successfully parsed.
-
+    let data = await fetch(url) 
+    let parsedData = await data.json() 
+    
     this.setState({
       articles: parsedData.articles,
       totalResults:parsedData.totalResults,
@@ -51,39 +50,18 @@ export class News extends Component {
   }
 
   handlePrevClick =async ()=>{
-
-    // let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=${this.state.page-1}&pageSize=${this.props.pageSize}`
-    // let data = await fetch(url) // The 'await' keyword ensures that the function pauses until the request completes.
-    // let parsedData = await data.json() // Parse the response from 'fetch' as JSON and store the parsed result in 'parsedData'. // The 'await' ensures the code waits until the JSON is successfully parsed.
-
-    // this.setState({
-    //   page:this.state.page-1,
-    //   articles: parsedData.articles,
-    //   loading:false
-    // })
     this.setState({page: this.state.page-1})
     this.updatePage();
   }
 
   handleNextClick=async ()=>{
-  //   if (!(this.state.page+1 >  Math.ceil(this.state.totalResults/this.props.pageSize)))
-  //   {  let url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=${this.state.page+1}&pageSize=${this.props.pageSize}`
-  //     this.setState({loading:true})
-  //     let data = await fetch(url) // The 'await' keyword ensures that the function pauses until the request completes.
-  //     let parsedData = await data.json() // Parse the response from 'fetch' as JSON and store the parsed result in 'parsedData'. // The 'await' ensures the code waits until the JSON is successfully parsed.
-  //   this.setState({
-  //     page:this.state.page+1,
-  //     articles: parsedData.articles,
-  //           loading:false
-  //   })
-  // }
     this.setState({page:this.state.page+1})
     this.updatePage();
   }
   render() {
     return (
       <div className='container my-3'>     
-        <h1 className='text-center my-4'>NewsMonkey - Top Headlines</h1>
+        <h1 className='text-center my-4'>NewsMonkey - Top {this.capitalize(this.props.category)} Headlines</h1>
         {this.state.loading && <Spinner/>}
         <div className="row">
         {!this.state.loading && this.state.articles?.map((element)=>(
