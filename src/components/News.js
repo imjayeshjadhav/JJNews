@@ -4,6 +4,8 @@ import Newsitem from './Newsitem'
 import Spinner from './Spinner';
 import InfiniteScroll from "react-infinite-scroll-component";
 
+// ba866326b7f24af2adcfb2ac80652cd8
+
 export class News extends Component {
   static defaultProps={
     country:'in',
@@ -65,7 +67,7 @@ export class News extends Component {
       this.setState({
         page:this.state.page+1,
       });
-      const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=${this.state.page}&pageSize=${this.props.pageSize}`
+      const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ba866326b7f24af2adcfb2ac80652cd8&page=${this.state.page}&pageSize=${this.props.pageSize}`;
       let data = await fetch(url) 
       let parsedData = await data.json() 
       this.setState({
